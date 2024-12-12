@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Perfil de Usuario</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/profile.css') }}">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+  <header>
+    <div class="container">
+      <div class="profile-header">
+        <div class="profile-banner">
+          <img src="{{ url_for('static', filename=usuario.banner_imagen) }}" alt="Banner">
+        </div>
+        <div class="profile-info">
+          <div class="profile-pic">
+            <img src="{{ url_for('static', filename=usuario.foto_perfil) }}" alt="Perfil">
+          </div>
+          <div class="profile-details">
+            <h2>{{ usuario.nombre }}</h2>
+            <p>{{ usuario.descripcion }}</p>
+            <button id="edit-profile-btn">Editar Perfil</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="container">
+      <div class="profile-nav">
+        <a href="#">Publicaciones</a>
+        <a href="#">Amigos</a>
+        <a href="#">Fotos</a>
+        <a href="#">Más</a>
+      </div>
+      <div class="profile-content">
+        <!-- Información del perfil -->
+        <div class="profile-info-display">
+          <h3>Información del Perfil</h3>
+          <p><strong>Nombre:</strong> {{ usuario.nombre }}</p>
+          <p><strong>Edad:</strong> {{ usuario.edad }}</p>
+          <p><strong>Ciudad:</strong> {{ usuario.ciudad }}</p>
+          <p><strong>País:</strong> {{ usuario.pais }}</p>
+          <p><strong>Estado Civil:</strong> {{ usuario.estado_civil }}</p>
+          <p><strong>Centro Educativo:</strong> {{ usuario.centro_educativo }}</p>
+          <p><strong>Intereses:</strong> {{ usuario.intereses }}</p>
+        </div>
+
+        <!-- Formulario de edición -->
+        <div class="profile-card" id="edit-profile-form">
+          <form action="{{ url_for('auth_bp.perfil') }}" method="POST" enctype="multipart/form-data">
+            <div class="input-wrap">
+              <label for="foto_perfil">Foto de Perfil:</label>
+              <input type="file" id="foto_perfil" name="foto_perfil" accept="image/*">
+            </div>
+            <div class="input-wrap">
+              <label for="banner_imagen">Imagen de Banner:</label>
+              <input type="file" id="banner_imagen" name="banner_imagen" accept="image/*">
+            </div>
+            <div class="input-wrap">
+              <label for="nombre">Nombre:</label>
+              <input type="text" id="nombre" name="nombre" value="{{ usuario.nombre }}">
+            </div>
+            <div class="input-wrap">
+              <label for="edad">Edad:</label>
+              <input type="number" id="edad" name="edad" value="{{ usuario.edad }}">
+            </div>
+            <div class="input-wrap">
+              <label for="ciudad">Ciudad:</label>
+              <input type="text" id="ciudad" name="ciudad" value="{{ usuario.ciudad }}">
+            </div>
+            <div class="input-wrap">
+              <label for="pais">País:</label>
+              <input type="text" id="pais" name="pais" value="{{ usuario.pais }}">
+            </div>
+            <div class="input-wrap">
+              <label for="estado_civil">Estado Civil:</label>
+              <select id="estado_civil" name="estado_civil">
+                <option value="Soltero" {% if usuario.estado_civil == 'Soltero' %}selected{% endif %}>Soltero</option>
+                <option value="Casado" {% if usuario.estado_civil == 'Casado' %}selected{% endif %}>Casado</option>
+                <option value="En una relación" {% if usuario.estado_civil == 'En una relación' %}selected{% endif %}>En una relación</option>
+                <!-- Más opciones si lo deseas -->
+              </select>
+            </div>
+            <div class="input-wrap">
+              <label for="centro_educativo">Centro Educativo:</label>
+              <input type="text" id="centro_educativo" name="centro_educativo" value="{{ usuario.centro_educativo }}">
+            </div>
+            <div class="input-wrap">
+              <label for="intereses">Intereses:</label>
+              <textarea id="intereses" name="intereses">{{ usuario.intereses }}</textarea>
+            </div>
+            <input type="submit" value="Actualizar Perfil" class="sign-btn">
+          </form>
+        </div>
+
+        <!-- Lista de amigos -->
+        <div class="friends-list">
+          <h3>Amigos</h3>
+          <div class="friends-container">
+            {% for amigo in usuario.amigos %}
+            <div class="friend-card">
+              <img src="{{ url_for('static', filename=amigo.foto_perfil) }}" alt="{{ amigo.nombre }}">
+              <p>{{ amigo.nombre }}</p>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Sección de publicaciones -->
+        <div class="profile-posts">
+          <!-- Aquí irán las publicaciones del usuario -->
+        </div>
+      </div>
+    </div>
+  </main>
+  <script src="{{ url_for('static', filename='js/profile.js') }}"></script>
+</body>
+</html>
